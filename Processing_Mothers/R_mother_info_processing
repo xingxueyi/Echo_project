@@ -1,4 +1,4 @@
-#Copy this file, echocon_xx.sas7bdat, echoconpv_xx.sas7bdat, bid.csv, and previous lists into the same folder you are working. 
+#Copy this file, echocon_xx.sas7bdat, echoconpv_xx.sas7bdat, bid.csv, and previous batch of lists into the same folder you are working. 
 #SOURCE this line first, DO NOT use run.
 rm(list=ls())
 mydir <-dirname(parent.frame(2)$ofile)
@@ -24,6 +24,7 @@ library(sas7bdat)
 library(reshape) 
 library(haven)
 
+#change names of the input and outpur lists every time
 motherlist<- 'P1_HealthCare_2_26_2019.csv'
 consentnames<- 'echoconpv_37.sas7bdat'
 consentlist<-'echocon_37.sas7bdat'
@@ -40,8 +41,11 @@ PAmotheruniquenames<-"PA_Mother_Unique_Names052119.csv"
 #this line does not need to change
 inputproviderlist<-"BOXAllMotherProviderList020118.csv"
 
+#get the bid and sid crosswalk list
 bid<-read.csv(bidlist)
 nrow(bid)
+
+#read the list containing mother consenting information
 pa7a <- read_sas(consentlist)
 View(pa7a)
 pa7aaddv<-pa7a[c(1:2,28,33,42,44,305)]

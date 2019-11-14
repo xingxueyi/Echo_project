@@ -1,0 +1,7 @@
+This script file is to generate three output files: 
+a. BOXPA/NCProviderListxxxx.csv (providers' information for kids), 
+b. BOXPA/NCChildrenlistxxxx.csv (kids' names and parents' names), 
+c. PA/NCConsentListWithUniqueNamesxxx.csv (a list containing non-duplicated kids' information).
+
+The required input files are allsubinsur.csv (insurance and kids' health provider information), echocon_xx.sas7bdat, echoconpv_xx.sas7bdat, bid.csv,
+#Copy allsubinsur.csv, echocon_xx.sas7bdat, echoconpv_xx.sas7bdat, bid.csv, and previous batch of output files (BOXPAProviderListxxxx.csv, BOXPAChildrenListxxxx.csv, BOXNCProviderListxxxx.csv, and BOXNCChildrenListxxxx.csv) into the same folder you are working at. 

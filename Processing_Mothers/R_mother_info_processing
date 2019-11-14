@@ -1,3 +1,4 @@
+#Created by Xueyi Xing, Jan, 2018
 #Copy this file, echocon_xx.sas7bdat, echoconpv_xx.sas7bdat, bid.csv, and previous batch of lists into the same folder you are working. 
 #SOURCE this line first, DO NOT use run.
 rm(list=ls())

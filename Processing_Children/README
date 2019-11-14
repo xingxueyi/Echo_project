@@ -3,5 +3,13 @@ a. BOXPA/NCProviderListxxxx.csv (providers' information for kids),
 b. BOXPA/NCChildrenlistxxxx.csv (kids' names and parents' names), 
 c. PA/NCConsentListWithUniqueNamesxxx.csv (a list containing non-duplicated kids' information).
 
-The required input files are allsubinsur.csv (insurance and kids' health provider information), echocon_xx.sas7bdat (consenting indicators for kids), echoconpv_xx.sas7bdat (kids and mothers' names), bid.csv (bid-sid crosswalk list).
-Please copy allsubinsur.csv, echocon_xx.sas7bdat, echoconpv_xx.sas7bdat, bid.csv, and previous batch of output files (BOXPAProviderListxxxx.csv, BOXPAChildrenListxxxx.csv, BOXNCProviderListxxxx.csv, and BOXNCChildrenListxxxx.csv) into the same folder you are working at. 
+The required input files are: 
+allsubinsur.csv (insurance and kids' health provider information), 
+echocon_xx.sas7bdat (consenting indicators for kids), 
+echoconpv_xx.sas7bdat (kids and mothers' names), 
+bid.csv (bid-sid crosswalk list),
+and the previous batch of output files.
+
+To proceed, please copy allsubinsur.csv, echocon_xx.sas7bdat, echoconpv_xx.sas7bdat, bid.csv, and 
+previous batch of output files (BOXPAProviderListxxxx.csv, BOXPAChildrenListxxxx.csv, BOXNCProviderListxxxx.csv, and 
+BOXNCChildrenListxxxx.csv) into the same folder you are working at. 

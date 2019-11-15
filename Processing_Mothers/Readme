@@ -10,5 +10,6 @@ bid.csv (bid-sid crosswalk list),
 and the previous batch of output files.
 
 To proceed, please copy allsubinsur.csv, echocon_xx.sas7bdat, echoconpv_xx.sas7bdat, bid.csv, and 
-previous batch of output files into the same folder you are working at. 
+previous batch of output files into the same folder you are working at. Then run the R codes in the file.
+
 

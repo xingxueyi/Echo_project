@@ -1,0 +1,106 @@
+#set up working directory
+
+setwd('C:/Users/xux67/Downloads')
+
+#install and load needed library packages
+
+install.packages('foreign')
+install.packages('Hmisc')
+install.packages('dplyr')
+install.packages('sas7bdat')
+install.packages('reshape')
+
+library(foreign)
+library(Hmisc)
+library(dplyr)
+library(sas7bdat)
+library(reshape)
+
+#read data. HCPPreDr1,2 are the 1st and 2nd providers, and HCPPreER is the emergence department provider.
+wide<-read.csv('Echo/P1_HealthCare/P1_HealthCare_12_04_2017a.csv')
+
+#change factor variables to string variables
+wide$HCPPreDr1<-as.character(wide$HCPPreDr1)
+wide$HCPPreDr2<-as.character(wide$HCPPreDr2)
+wide$HCPPreER<-as.character(wide$HCPPreER)
+View(wide)
+
+#since we have two provider names for each subject, we need to change the wide format to long format, 
+
+long<-reshape(wide, varying =c('HCPPreDr1','HCPPreDr2'), timevar = "order", idvar = "S_ID", direction='long', sep = "")
+
+#sort by S_ID and order
+long<-long[order(long$S_ID,long$order),]
+
+#clean the data, change all nonsense values to “UNKNOWN”, although I have included many values, more values might need to be added.
+long$HCPPreDr[is.na(long$HCPPreDr)]<-"UNKNOWN"
+long$HCPPreDr[long$HCPPreDr %in% c(".D","na","same", "Same", "SAME","none","N/A","n/a","0","same as above","Na","GRANDMOTHER IS PC","Hinesville, GA","NO PRENATAL CARE","NOT SURE OF NAME PRIVATE PRACTICE IN WILSON","B Building near the Altoona Hospital","Do Not Remeber","doctor's office","Dont Know","dont know","Doesnt know","Dont know","in Huntingdon""unknown|Johnstown","K","None","k","N/a","y","UNKNOWN","no","doctor","Obgyn","a","Clinic","Doctor","None","Adoptive Parent")]<-"UNKNOWN"
+
+long$HCPPreDr[long$HCPPreDr %in% c(".D","na","same", "Same", "SAME","none","N/A","n/a","0","same as above","Na")]<-"UNKNOWN"
+long$HCPPreDr[long$HCPPreDr %in% c("GRANDMOTHER IS PC","Hinesville, GA","NO PRENATAL CARE","NOT SURE OF NAME PRIVATE PRACTICE IN WILSON","B Building near the Altoona Hospital","Do Not Remeber","doctor's office")]<-"UNKNOWN"
+
+long$HCPPreDr[long$HCPPreDr %in% c("Dont Know","dont know","Doesnt know","Dont know","in Huntingdon","unknown|Johnstown","K","None","k","N/a","y","UNKNOWN","no","doctor","Obgyn","a","Clinic","Doctor","None","Adoptive Parent")]<-"UNKNOWN"
+
+#deduplicate records with same SID and the provider name
+#define column names to be used
+depvar1<-long[,c('S_ID','HCPPreDr')]
+View(depvar1)
+
+#depulicate
+longunq<-long[!duplicated(depvar1),]
+
+
+#get the distance matrix by Levenshtein_distance
+ld <- adist(longunq$HCPPreDr)
+#add provider names to each row
+rownames(ld) <- longunq$HCPPreDr
+
+#clusterize
+hc <- hclust(as.dist(ld))
+
+#plot
+plot(hc)
+
+#define the cluster number as 150. Users might need to play around with this number to see how can get the best result. 
+rect.hclust(hc,k=150)
+result <- data.frame(longunq,cutree(hc,k=150))
+View(result)
+
+#change column name to “clusgrp”
+colnames(result)[6]<-"clusgrp"
+
+#get unique rows with provider names, cluster indicators, and state names
+dist3<-result %>% distinct(HCPPreDr,clusgrp,state)
+View(dist3)
+
+#create a dataframe (provider) to contain all possible names for each health provider
+allnames<-rep(NA, max(dist3$clusgrp))
+clusgrp<-seq(1,150)
+provider<-cbind(allnames, clusgrp)
+provider<-as.data.frame(provider)
+dist3$state<-as.character(dist3$state)
+
+#fill in state info by double loops
+for (i in 1:max(dist3$clusgrp)) {
+      for (j in 1:nrow(dist3) ){
+          ifelse(provider$clusgrp[i]==dist3$clusgrp[j], provider$state[i]<-dist3$state[j], next)}}
+View(provider)
+
+
+#fill in ‘allnames’ values by double loops
+for (i in 1:max(dist3$clusgrp)) {
+      for (j in 1:nrow(dist3) ){
+          ifelse(provider$clusgrp[i]==dist3$clusgrp[j], provider$allnames[i]<-paste(provider$allnames[i],dist3$HCPPreDr[j],sep='|'),
+                 next)}}
+View(provider)
+
+#delete unwanted ‘NA|’s at the beginning of each value
+provider$allnames<-sub('^NA\\|','',provider$allnames)
+
+#get the first name in ‘allnames’ as the clinic name for each cluster group
+firstname<-strsplit(provider$allnames, "\\|")
+provider$Clinic<-sapply(firstname,'[[',1)
+View(provider)
+
+provider2<-read.csv("MotherProviderList_Final_Edit.csv")
+

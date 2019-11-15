@@ -1,1 +1,14 @@
-including consenting status, provider information, id/name, etcintervention justsetting up this this program is to caputre the correct names of monthers who consented to the medical records release and link them to a list of providers. Some details of revision can got to https://app.asana.com/0/1108216868785195/1114074674508324/f for reference.
+This script file is to generate three output files: 
+a. BOXPA/NCProviderListxxxx.csv (providers' information for mothers), 
+b. BOXPA/NCMotherlistxxxx.csv (kids' names and parents' names), 
+c. PA/NC_Mother_Unique_Namesxxx.csv (a list containing non-duplicated mothers' information).
+
+The required input files are:  
+echocon_xx.sas7bdat (consenting indicators for kids), 
+echoconpv_xx.sas7bdat (kids and mothers' names), 
+bid.csv (bid-sid crosswalk list),
+and the previous batch of output files.
+
+To proceed, please copy allsubinsur.csv, echocon_xx.sas7bdat, echoconpv_xx.sas7bdat, bid.csv, and 
+previous batch of output files into the same folder you are working at. 
+

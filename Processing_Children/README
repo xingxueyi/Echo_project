@@ -12,4 +12,4 @@ and the previous batch of output files.
 
 To proceed, please copy allsubinsur.csv, echocon_xx.sas7bdat, echoconpv_xx.sas7bdat, bid.csv, and 
 previous batch of output files (BOXPAProviderListxxxx.csv, BOXPAChildrenListxxxx.csv, BOXNCProviderListxxxx.csv, and 
-BOXNCChildrenListxxxx.csv) into the same folder you are working at. 
+BOXNCChildrenListxxxx.csv) into the same folder you are working at. Then run the R codes in the file.
